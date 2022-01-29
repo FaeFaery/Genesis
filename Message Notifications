@@ -1,0 +1,42 @@
+========================================
+MESSAGE NOTIFICATIONS DISPLAY TRIGGER
+========================================
+Name: Auto: Comms
+Type: regexp
+Pattern: (The small, black bat flies up to you with a message from (.*).|Postmaster tells you that you have new mail from (.*).|The brown-striped chipmunk scampers up to you with a message from (.*). You carefully remove the note from the tube around its neck.|hands you a letter and says: I have a letter for you from (.*)!|crow suddenly flies in from somewhere, and lands on your shoulder and gives you a message.|A red-winged harrekki descends from above, sinks its talons into your arm, and gives you a message from (.*).)
+ 
+Execute the following javascript:
+// To add more messengers to this trigger, here are the steps: 
+//Create a new case then make sure to quote the messenger line text. 
+//If the sender's name can be found in the text, replace the name with an args. Follow the format that can be seen below: "Text " + args[designated number] + " Remaining text." followed by a colon. The new designated number should follow the number order in the list (So, if you were to add a new line now, the new designated number would be 7 because 1-6 is already taken.) and don't forget the spaces! 
+//Then, just paste '$("#addons").text("You got a missive from " + args[designated number] + "!");' and break.
+//If the sender cannot be seen, just create a new case, quote the text, add a :, paste '$("#addons").text("You got a missive!");' and break. No added stress of designating an args.
+  switch (args[1]){
+      case 'The small, black bat flies up to you with a message from ' + args[2]+ '.':
+    $("#addons").text("You got a missive from " + args[2] + "!");
+        break;
+      case 'Postmaster tells you that you have new mail from ' + args[3] + '.':
+    $("#addons").text("You got a missive from " + args[3] + "!");
+        break;
+      case 'The brown-striped chipmunk scampers up to you with a message from ' + args[4] + '. You carefully remove the note from the tube around its neck.':
+    $("#addons").text("You got a missive from " + args[4] + "!");
+        break;
+    case 'hands you a letter and says: I have a letter for you from ' + args[5] + '!':
+    $("#addons").text("You got a missive from " + args[5] + "!");
+        break;
+    case 'crow suddenly flies in from somewhere, and lands on your shoulder and gives you a message.':
+    $("#addons").text("You got a missive!");
+        break;
+    case 'A red-winged harrekki descends from above, sinks its talons into your arm, and gives you a message from ' + args[6] + '.':
+        $("#addons").text("You got a missive from " + args[6] + "!");
+    }
+ 
+========================================
+MESSAGE NOTIFICATIONS DISPLAY ALIAS
+========================================
+Pattern: read 
+ 
+Execute the following javascript:
+// This is for getting rid of the message notification and return it to the spell effect display. 'Update' is the alias from the spell display effects so be sure to have that!
+  gwc.connection.send('read ' + args[1]);
+  gwc.connection.send('update', true);
