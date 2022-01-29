@@ -1,0 +1,29 @@
+  /*USAGE:
+    To start: <path start>
+    To record path: <path (command)> ex. <path n> or <path climb cliff>
+    To display recorded path: <path display>
+    To copy recorded path: <path copy>
+  */
+     if (args[1] == 'start'){ 
+        gwc.userdata.walklist = [];
+        gwc.output.append('Starting to record paths!');
+      } 
+      else if (args[1] !== 'display' & args[1] !== 'copy'){ 
+        if (gwc.userdata.walklist.length == 0){ 
+          gwc.userdata.walklist += args['*'];
+        } else { 
+          gwc.userdata.walklist += "," + args['*'];
+        }
+      gwc.connection.send(args['*']);
+      }
+      if (args[1] == 'display'){ 
+       const walklist = gwc.userdata.walklist
+       const splitlist = walklist.split(",");
+            for (var i = 0; i < splitlist.length; i++){
+          gwc.output.append(splitlist.at(i))
+          }
+      }
+      if (args[1] == 'copy'){
+        const walklist = gwc.userdata.walklist
+        navigator.clipboard.writeText(walklist.split(',').join("\r\n"));
+          }
