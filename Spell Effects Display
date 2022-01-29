@@ -1,0 +1,61 @@
+==========================================
+SPELL EFFECT DISPLAY TRIGGER
+==========================================
+Name: Auto: Spell Effects
+Type: regexp
+Pattern: (You return to your normal appearance.|Your appearance changes. You look like somebody else.|You feel your enhancement of additional evasion fades away.|The blood infuses you with enhanced level of evasion.|You feel more stronger and more ferocious.|You feel normal again.)
+ 
+Execute the following javascript:
+  switch(args[1]){
+    case 'You return to your normal appearance.':
+    gwc.output.color('light blue');
+    gwc.userdata.incognito = 'Undisguised'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+      break;
+    case 'Your appearance changes. You look like somebody else.':
+    gwc.output.color('light blue');
+    gwc.userdata.incognito = 'Disguised'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    break;
+    case 'You feel your enhancement of additional evasion fades away.':
+    gwc.output.color('light blue');
+    gwc.userdata.elusiveness = 'Off'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    break;
+    case 'The blood infuses you with enhanced level of evasion.':
+    gwc.output.color('light blue');
+    gwc.userdata.elusiveness = 'On'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    break;
+    case 'You feel more stronger and more ferocious.':
+    gwc.output.color('light blue');
+    gwc.userdata.amplify = 'On'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    break;
+    case 'You feel normal again.':
+    gwc.output.color('light blue');
+    gwc.userdata.amplify = 'Off'
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+  }
+==========================================
+SPELL EFFECT DISPLAY ALIASES
+==========================================
+Pattern: comms  NOTE: You can add this to your comms alias.
+ 
+Execute the following javascript:
+//Removes the tabs on the map. Useless things -_-
+  $('#topsidebar').find('.idTabs').remove();
+//Adds a top border to the map. To make it look nice :3
+  map.style.cssText += 'border-top:1px solid rgb(153, 153, 153);';
+//Creates a new html element where the spell effect displays will appear.
+  $('#topsidebar')[0].innerHTML += "<div id=\"addons\" class=\"text\">\n <effects>Effects will appear here.</effects>\n </div>\n";
+//Adjusts the location of the spell effect display... If it's not centered, try tinkering with the '8px' here.
+  addons.style.cssText += 'padding:8px;';
+-------------------------------------------
+Pattern: update NOTE: This is to add the spell effect displays onto the webclient.
+ 
+Execute the following javascript:
+if (gwc.userdata.incognito == undefined){gwc.userdata.incognito = 'Undisguised'}
+if (gwc.userdata.elusiveness == undefined){gwc.userdata.elusiveness = 'Off'}
+if (gwc.userdata.amplify == undefined){gwc.userdata.amplify = 'Off'}
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
