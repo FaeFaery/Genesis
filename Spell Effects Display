@@ -3,39 +3,47 @@ SPELL EFFECT DISPLAY TRIGGER
 ==========================================
 Name: Auto: Spell Effects
 Type: regexp
-Pattern: (You return to your normal appearance.|Your appearance changes. You look like somebody else.|You feel your enhancement of additional evasion fades away.|The blood infuses you with enhanced level of evasion.|You feel more stronger and more ferocious.|You feel normal again.)
+Pattern: (You return to your normal appearance.|Your appearance changes. You look like somebody else.|You feel your enhancement of additional evasion fades away.|The blood infuses you with enhanced level of evasion.|You feel more stronger and more ferocious.|You feel normal again.|Faery slowly licks a drop of blood from one of her fangs.|Faery inhales deeply while softening her vision, as if she can taste something in the air.)
  
 Execute the following javascript:
   switch(args[1]){
     case 'You return to your normal appearance.':
     gwc.output.color('light blue');
     gwc.userdata.incognito = 'Undisguised'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
       break;
     case 'Your appearance changes. You look like somebody else.':
     gwc.output.color('light blue');
     gwc.userdata.incognito = 'Disguised'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
     break;
     case 'You feel your enhancement of additional evasion fades away.':
     gwc.output.color('light blue');
     gwc.userdata.elusiveness = 'Off'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
     break;
     case 'The blood infuses you with enhanced level of evasion.':
     gwc.output.color('light blue');
     gwc.userdata.elusiveness = 'On'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
     break;
     case 'You feel more stronger and more ferocious.':
     gwc.output.color('light blue');
     gwc.userdata.amplify = 'On'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
     break;
     case 'You feel normal again.':
     gwc.output.color('light blue');
     gwc.userdata.amplify = 'Off'
-    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+    gwc.connection.send('update', true);
+    case 'Faery slowly licks a drop of blood from one of her fangs.':
+    gwc.userdata.luv = 'On'
+    gwc.connection.send('update', true);
+    break;
+    case 'Faery inhales deeply while softening her vision, as if she can taste something in the air.':
+    gwc.userdata.luv = 'Off'
+    gwc.connection.send('update', true);
+    break;
   }
 ==========================================
 SPELL EFFECT DISPLAY ALIASES
@@ -58,4 +66,8 @@ Execute the following javascript:
 if (gwc.userdata.incognito == undefined){gwc.userdata.incognito = 'Undisguised'}
 if (gwc.userdata.elusiveness == undefined){gwc.userdata.elusiveness = 'Off'}
 if (gwc.userdata.amplify == undefined){gwc.userdata.amplify = 'Off'}
+if (mud.gmcp['char.team'].members.includes('Faery')){
+    $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify + " Luv: " + gwc.userdata.luv); 
+    } else {
     $("#addons").text(gwc.userdata.incognito + " Evade: " + gwc.userdata.elusiveness + " Str: " + gwc.userdata.amplify);
+}
