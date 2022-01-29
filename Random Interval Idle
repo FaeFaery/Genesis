@@ -1,0 +1,14 @@
+Pattern: random
+     function myFunction() {
+      var min = 3*60000,
+          max = 8*60000;
+      var rand = Math.floor(Math.random() * (max - min + 1) + min); //Generate Random number between 3 - 8 minutes
+      var time = rand/60000;
+      gwc.output.append('Waiting for ' + time.toFixed(2) + ' minutes');
+      setTimeout(function(){ 
+                            //add gwc.connection.send('') actions here
+                            gwc.connection.send('save silent');
+                            myFunction();}, rand);
+    }
+    
+    myFunction()
