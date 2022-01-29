@@ -1,0 +1,59 @@
+Pattern: list
+    /*USAGE: 
+     To begin creating a script: <script start (creature)> ex. <list start orc>
+     To record command: <script (command)> ex. <script n> <script out> <script enter tunnel>
+     To append created script: <script display>
+     To copy created script: <script copy>
+    */
+    
+    if (args[1] == 'start'){ //to start
+      gwc.userdata.list = [];
+      if (args[3] == undefined){
+      gwc.userdata.listcreature = args[2]
+      //begin recording args[1] by creating an empty gwc.userdata value and assign creature value
+       } else if (args[3] !== 'undefined'){
+      gwc.userdata.listcreature = args[2] + ' ' + args[3]
+      }
+      gwc.output.append("Creating a script for attacking " + gwc.userdata.listcreature);
+      gwc.output.color("light blue");
+    } 
+    else if (args[1] !== 'display' & args[1] !== 'copy'){ 
+      if (gwc.userdata.list.length == 0){ 
+        gwc.userdata.list += "{path:['" + args['*'] + "'],creature:sn},"
+      //for the first recorded value, do not add a coma
+      } else { 
+        gwc.userdata.list += "^" + "{path:['" + args['*'] + "'],creature:sn},"
+      //for all other values add a ^ before the text
+      }
+    gwc.connection.send(args['*']);
+    }
+    
+    if (args[1] == 'display'){ //to display
+    gwc.output.append('gwc.userdata.type = 1');
+    gwc.output.append('gwc.userdata.script = gwc.userdata.script || {};');
+    gwc.output.append('var s = gwc.userdata.script;');
+    gwc.output.append('var sn = " ' + gwc.userdata.listcreature + '";');
+    gwc.output.append('s.plan = [');
+     const list = gwc.userdata.list
+     //create an array out of the gwc.userdata.value
+     const splitlist = list.split("^");
+     /*split the array at every ^ (this makes it so that the 'length' of the array is defined by
+       a group of letters and not by letter.)*/
+          for (var i = 0; i < splitlist.length; i++){
+        gwc.output.append(splitlist.at(i))
+     /*Length has an assigned value defined by i. For example, if array = ['one','two','three'] then
+       length at 1 is equal to one. 2 at two. 3 at three. 
+       'for' creates a loop of gwc.output.append and will send an i that increases with every
+        interval. So, it will keep on appending each value until the last length value is
+        reached (this is created with the condition 'i < splitlist.length')*/
+        }
+    gwc.output.append('];');
+    gwc.output.append('s.got = 0;');
+    gwc.output.append('s.step = -1;');
+    gwc.output.append('gwc.connection.send("s_next", true)');
+    }
+  if (args[1] == 'copy'){
+    gwc.userdata.copyvalue = "gwc.userdata.type = 1^gwc.userdata.script = gwc.userdata.script || {};^var s = gwc.userdata.script;^var sn = ' " + gwc.userdata.listcreature + "';^s.plan = [^" + gwc.userdata.list + "^];^s.got = 0;^s.step = -1;^gwc.connection.send('s_next', true);"
+    const copylist = gwc.userdata.copyvalue
+    navigator.clipboard.writeText(copylist.split('^').join("\r\n"));
+  }
